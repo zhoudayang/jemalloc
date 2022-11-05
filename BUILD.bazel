@@ -1,0 +1,83 @@
+exports_files(["jemalloc.BUILD"])
+
+cc_library(
+    name = "jemalloc_c",
+    srcs = glob(
+        ["src/*.c"],
+    ) + [],
+    hdrs = glob(["include/jemalloc/internal/*.h"]) + ["include/jemalloc/jemalloc.h"],
+    copts = [
+        "-std=gnu11",
+        "-Wall",
+        "-Wextra",
+        "-Wsign-compare",
+        "-Wno-format-zero-length",
+        "-Wno-missing-braces",
+        "-Wno-missing-field-initializers",
+        "-Wpointer-arith",
+        "-Wno-maybe-uninitialized",
+        "-Wno-missing-attributes",
+        "-Wundef",
+        "-pipe",
+        "-g3",
+        "-fvisibility=hidden",
+        "-O3",
+        "-funroll-loops",
+        "-fPIC",
+        "-DPIC",
+        "-D_GNU_SOURCE",
+        "-D_REENTRANT",
+        "-DJEMALLOC_NO_PRIVATE_NAMESPACE",
+        "-Ijemalloc/include",
+    ],
+    includes = [
+        ".",
+        "include",
+    ],
+    linkopts = [
+        "-ldl",
+        "-lm",
+        "-lpthread",
+        "-lrt",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "jemalloc",
+    srcs = [
+        "src/jemalloc_cpp.cpp",
+    ],
+    hdrs = glob(["include/jemalloc/internal/*.h"]) + ["include/jemalloc/jemalloc.h"],
+    copts = [
+        "-std=gnu++11",
+        "-Wall",
+        "-Wextra",
+        "-Wsign-compare",
+        "-Werror",
+        "-Wno-format-zero-length",
+        "-Wno-missing-attributes",
+        "-pipe",
+        "-g3",
+        "-fvisibility=hidden",
+        "-O3",
+        "-funroll-loops",
+        "-fPIC",
+        "-DPIC",
+        "-D_GNU_SOURCE",
+        "-D_REENTRANT",
+        "-DJEMALLOC_NO_PRIVATE_NAMESPACE",
+        "-Ijemalloc/include",
+    ],
+    includes = [
+        ".",
+        "include",
+    ],
+    linkopts = [],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":jemalloc_c",
+    ],
+)
